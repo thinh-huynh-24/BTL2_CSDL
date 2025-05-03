@@ -16,6 +16,9 @@ BEGIN
     -- 2. Xóa các bản ghi liên quan trong bảng thanh_toan
     DELETE FROM thanh_toan WHERE ma_don_hang = @ma_don_hang;
 
-    -- 3. Xóa đơn hàng
+    -- 3. Xóa các bản ghi liên quan trong bảng chua
+    DELETE FROM chua WHERE ma_don_hang = @ma_don_hang;
+
+    -- 4. Xóa đơn hàng
     DELETE FROM don_hang WHERE ma_don_hang = @ma_don_hang;
 END;

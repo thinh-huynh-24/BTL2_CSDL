@@ -1,10 +1,15 @@
 import Layout from '../../components/Layout';
 import DonHangForm from '../../components/DonHangForm';
+import DonHangCreate from '../../components/DonHangCreate';
 
 export default function DonHangFormPage() {
   return (
     <Layout>
-      <DonHangForm />
+      <div className='gap-4 p-8 flex '>
+        <DonHangCreate />
+        <DonHangForm />
+      </div>
+      
     </Layout>
   );
 }

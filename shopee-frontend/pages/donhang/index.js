@@ -1,10 +1,15 @@
-import Layout from '../../components/Layout';
 import DonHangTable from '../../components/DonHangTable';
+import TongGiaTriDonHang from './tong-gia-tri';
+import Layout from '../../components/Layout';
 
-export default function DanhSachDonHang() {
+
+export default function Home() {
   return (
-    <Layout>
-      <DonHangTable />
-    </Layout>
+    <Layout> 
+      <div className="p-8">
+        <DonHangTable />
+      </div> 
+  </Layout>
+    
   );
 }

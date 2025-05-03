@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { sql, dbConfig } = require('../services/dbConnect'); // Import cấu hình kết nối và đối tượng sql
-
+const { getConnectionPool, sql } = require('../services/dbConnect');
 // API để thêm đơn hàng
 router.post('', async (req, res) => {
   const {
@@ -18,13 +17,14 @@ router.post('', async (req, res) => {
     TongTien
   } = req.body;
 
-  try {
-    const pool = await dbConnect();
-    
-    // Tạo biến lỗi trả về
-    let ErrorMessage = '';
+  // Input validation
+  if (!MaDonHang || !MaKhachHang || !TongTien) {
+    return res.status(400).json({ message: 'Thiếu thông tin bắt buộc' });
+  }
 
-    // Gọi thủ tục INSERT_DonHang
+  try {
+    const pool = await getConnectionPool();
+    
     const result = await pool.request()
       .input('MaDonHang', sql.VarChar(10), MaDonHang)
       .input('MaNguoiBan', sql.VarChar(10), MaNguoiBan)
@@ -35,23 +35,27 @@ router.post('', async (req, res) => {
       .input('PhuongThucThanhToan', sql.NVarChar(50), PhuongThucThanhToan)
       .input('TrangThai', sql.NVarChar(50), TrangThai)
       .input('TrangThaiThanhToan', sql.Int, TrangThaiThanhToan)
-      .input('NgayThanhToan', sql.Date, NgayThanhToan || null) // Nếu không có ngày thanh toán thì sẽ mặc định là NULL
+      .input('NgayThanhToan', sql.Date, NgayThanhToan || null)
       .input('TongTien', sql.Decimal(18, 2), TongTien)
       .output('ErrorMessage', sql.NVarChar(200))
-      .execute('INSERT_DonHang');  // Tên của thủ tục trong SQL Server
+      .execute('INSERT_DonHang');
 
-    // Kiểm tra lỗi trả về từ thủ tục
     if (result.output.ErrorMessage) {
       return res.status(400).json({ message: result.output.ErrorMessage });
     }
 
-    res.status(201).json({ message: 'Đơn hàng đã được thêm thành công!' });
+    res.status(201).json({ 
+      success: true,
+      message: 'Đơn hàng đã được thêm thành công!',
+      orderId: MaDonHang
+    });
   } catch (error) {
-    console.error(error);
+    console.error('Lỗi khi thêm đơn hàng:', error);
     res.status(500).json({ 
-        message: error.message,
-        error: 'Lỗi khi thêm đơn hàng' 
-      });
+      success: false,
+      message: 'Lỗi hệ thống khi thêm đơn hàng',
+      error: error.message
+    });
   }
 });
 
@@ -112,6 +116,60 @@ router.patch('', async (req, res) => {
     }
   });
 
+// API lấy tất cả đơn hàng
+router.get('/all', async (req, res) => {
+  try {
+    const pool = await sql.connect(dbConfig);
+    const result = await pool.request()
+      .query('SELECT * FROM don_hang'); // Thực thi truy vấn lấy tất cả đơn hàng
+
+    res.status(200).json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Lỗi khi lấy danh sách đơn hàng', error: error.message });
+  }
+});
+
+// API xóa đơn hàng
+router.delete('/:ma_don_hang', async (req, res) => {
+  const { ma_don_hang } = req.params;
+
+  if (!ma_don_hang) {
+    return res.status(400).json({ message: 'Mã đơn hàng không hợp lệ' });
+  }
+
+  try {
+    const pool = await sql.connect(dbConfig);
+
+    // Kiểm tra nếu đơn hàng có tồn tại trong cơ sở dữ liệu trước khi xóa
+    const checkExistQuery = 'SELECT COUNT(*) AS count FROM don_hang WHERE ma_don_hang = @ma_don_hang';
+    const checkExistResult = await pool.request()
+      .input('ma_don_hang', sql.VarChar, ma_don_hang)
+      .query(checkExistQuery);
+
+    if (checkExistResult.recordset[0].count === 0) {
+      return res.status(404).json({ message: 'Không tìm thấy đơn hàng để xóa.' });
+    }
+
+    // Xóa đơn hàng
+    const deleteQuery = 'DELETE FROM don_hang WHERE ma_don_hang = @ma_don_hang';
+    const result = await pool.request()
+      .input('ma_don_hang', sql.VarChar, ma_don_hang)
+      .query(deleteQuery);
+
+    if (result.rowsAffected[0] === 0) {
+      return res.status(404).json({ message: 'Không tìm thấy đơn hàng để xóa.' });
+    }
+
+    res.status(200).json({ message: 'Đơn hàng đã được xóa thành công!' });
+  } catch (error) {
+    console.error('Lỗi khi xóa đơn hàng:', error);
+    res.status(500).json({ message: 'Lỗi khi xóa đơn hàng', error: error.message });
+  }
+});
+
+  
+
 // Lấy danh sách đơn hàng của khách hàng theo trạng thái
 router.get('/:ma_khach_hang', async (req, res) => {
     const { ma_khach_hang } = req.params;
@@ -130,7 +188,7 @@ router.get('/:ma_khach_hang', async (req, res) => {
         res.status(200).json(result.recordset); // Trả về kết quả từ SQL Server
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: error.message });
     }
 });
 
@@ -152,7 +210,7 @@ router.get('/:ma_don_hang', async (req, res) => {
         res.status(200).json(result.recordset);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: error.message });
     }
 });
 
