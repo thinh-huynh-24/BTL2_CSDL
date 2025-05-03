@@ -1,5 +1,3 @@
-USE SHOPPE
-GO
 CREATE OR ALTER PROCEDURE sp_chi_tiet_don_hang
     @ma_don_hang VARCHAR(50)
 AS

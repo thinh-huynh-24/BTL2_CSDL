@@ -1,5 +1,3 @@
-USE SHOPPE
-GO
 CREATE OR ALTER PROCEDURE sp_danh_sach_don_hang
     @ma_khach_hang VARCHAR(50),
     @trang_thai NVARCHAR(50)

@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const donhangRoutes = require('../shopee-backend/src/routes/donhang'); // Import route cho đơn hàng
 const tongGiaTriDonHangRouter = require('./src/routes/tongGiaTriDonHang');
 const demDonHangTheoTrangThaiRouter = require('./src/routes/demDonHangTheoTrangThai'); 
+const maLienQuanRouter = require('./src/routes/ma-lien-quan');
 const cors = require('cors');
 
 app.use(cors());
@@ -18,6 +19,7 @@ app.use('/api/donhang/tong-gia-tri', tongGiaTriDonHangRouter);
 
 app.use('/api/dem-don-hang-theo-khach-hang-trang-thai', demDonHangTheoTrangThaiRouter);
 
+app.use('/api/ma-lien-quan', maLienQuanRouter);
 
 // Khởi động server
 const PORT = process.env.PORT || 3000;
