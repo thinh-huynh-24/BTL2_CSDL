@@ -26,11 +26,12 @@ useEffect(() => {
     try {
       const response = await fetch(`http://localhost:3000/api/donhang/tong-gia-tri/${maDonHang}`);
       const data = await response.json();
-      if (data.tong_gia_tri === null) {
+      if (data.donHang === null) {
+        console.log(data)
         setError('Không tìm thấy đơn hàng này');
         setTongGiaTri(null);
       } else {
-        setTongGiaTri(data.tong_gia_tri);
+        setTongGiaTri(data.donHang);
         setError('');
       }
     } catch (err) {

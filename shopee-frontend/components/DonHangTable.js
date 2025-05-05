@@ -7,7 +7,6 @@ export default function DonHangTable() {
   const [maKhachHang, setMaKhachHang] = useState('');
   const [khachHangOptions, setKhachHangOptions] = useState([]);
 
-  // Lấy danh sách mã khách hàng cho dropdown
   useEffect(() => {
     fetch('http://localhost:3000/api/ma-lien-quan')
       .then(res => res.json())
@@ -38,7 +37,6 @@ export default function DonHangTable() {
       )
     : [];
 
-  // Lấy danh sách mã đơn hàng duy nhất cho dropdown
   const maDonHangOptions = Array.from(
     new Set((donHangs || []).map(dh => dh.ma_don_hang))
   );

@@ -5,7 +5,7 @@ import DonHangCreate from '../../components/DonHangCreate';
 export default function DonHangFormPage() {
   return (
     <Layout>
-      <div className='gap-4 p-8 flex flex-col '>
+      <div className='gap-4 p-8 flex flex-warp '>
         
         <DonHangForm />
         <DonHangCreate />

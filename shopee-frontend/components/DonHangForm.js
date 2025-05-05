@@ -16,10 +16,9 @@ export default function DonHangForm() {
   });
 
   const [donHangs, setDonHangs] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Kiểm tra modal có mở không
-  const [editingDonHang, setEditingDonHang] = useState(null); // Lưu đơn hàng đang chỉnh sửa
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [editingDonHang, setEditingDonHang] = useState(null); 
 
-  // State cho mã liên quan
   const [maLienQuan, setMaLienQuan] = useState({
     nguoiBan: [],
     diaChi: [],
@@ -27,19 +26,17 @@ export default function DonHangForm() {
     kho: [],
   });
 
-  // Hàm lấy tất cả đơn hàng
   const fetchDonHangs = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/donhang/all');
       const data = await response.json();
-      setDonHangs(Array.isArray(data) ? data : []); // Đảm bảo rằng donHangs là một mảng
+      setDonHangs(Array.isArray(data) ? data : []); 
     } catch (error) {
       console.error('Lỗi khi lấy đơn hàng:', error);
-      setDonHangs([]); // Đảm bảo donHangs là mảng rỗng khi có lỗi
-    }
+      setDonHangs([]); 
   };
+}
 
-  // Gọi hàm lấy đơn hàng khi component được render
   useEffect(() => {
     fetchDonHangs();
   }, []);
@@ -47,7 +44,7 @@ export default function DonHangForm() {
   // Lấy mã liên quan khi mở modal chỉnh sửa
   useEffect(() => {
     if (isModalOpen) {
-      fetch('http://localhost:3000/api/ma-lien-quan') // Đúng cổng backend
+      fetch('http://localhost:3000/api/ma-lien-quan')
         .then(res => res.json())
         .then(data => setMaLienQuan(data))
         .catch(() => setMaLienQuan({ nguoiBan: [], diaChi: [], khachHang: [], kho: [] }));
@@ -98,7 +95,7 @@ export default function DonHangForm() {
     Object.keys(updated).forEach((key) => {
       if (
         (updated[key] === '' || updated[key] === undefined || updated[key] === null)
-        && key !== 'MaDonHang' // KHÔNG xóa MaDonHang khỏi payload
+        && key !== 'MaDonHang'
       ) {
         delete updated[key];
       }
@@ -109,7 +106,6 @@ export default function DonHangForm() {
       return;
     }
 
-    // Đảm bảo các trường số đúng kiểu
     if (updated.PhiVanChuyen !== undefined) updated.PhiVanChuyen = parseFloat(updated.PhiVanChuyen);
     if (updated.TrangThaiThanhToan !== undefined) updated.TrangThaiThanhToan = parseInt(updated.TrangThaiThanhToan);
     if (updated.TongTien !== undefined) updated.TongTien = parseFloat(updated.TongTien);
@@ -191,13 +187,11 @@ export default function DonHangForm() {
         </tbody>
       </table>
 
-      {/* Modal chỉnh sửa */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded shadow-md w-96">
             <h2 className="text-xl font-semibold mb-4">Chỉnh sửa đơn hàng</h2>
             <form className="space-y-3" onSubmit={handleSubmit}>
-              {/* Mã đơn hàng - chỉ hiển thị, không cho sửa */}
               <input
                 type="text"
                 name="MaDonHang"
@@ -318,7 +312,7 @@ export default function DonHangForm() {
                 <button
                   type="button"
                   className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400"
-                  onClick={() => setIsModalOpen(false)} // Đóng modal khi hủy
+                  onClick={() => setIsModalOpen(false)} 
                 >
                   Hủy bỏ
                 </button>

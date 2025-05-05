@@ -1,4 +1,4 @@
-import '../styles/globals.css'   // ✅ đường dẫn đến file CSS chính
+import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />

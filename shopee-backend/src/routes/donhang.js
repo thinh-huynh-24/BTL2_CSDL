@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { getConnectionPool, sql } = require('../services/dbConnect');
 
-// API để thêm đơn hàng
 router.post('', async (req, res) => {
   const {
     MaDonHang,
@@ -55,7 +54,6 @@ router.post('', async (req, res) => {
   }
 });
 
-// API để cập nhật đơn hàng
 router.patch('', async (req, res) => {
   const {
     MaDonHang,
@@ -70,8 +68,6 @@ router.patch('', async (req, res) => {
 
   try {
     const pool = await getConnectionPool();
-
-    // Kiểm tra nếu mã đơn hàng không tồn tại
     const existingOrder = await pool.request()
       .input('MaDonHang', sql.VarChar(50), MaDonHang)
       .query('SELECT COUNT(1) AS count FROM don_hang WHERE ma_don_hang = @MaDonHang');
@@ -80,7 +76,6 @@ router.patch('', async (req, res) => {
       return res.status(400).json({ error: 'Mã đơn hàng không tồn tại.' });
     }
 
-    // Xây dựng câu truy vấn động
     let query = 'UPDATE don_hang SET ';
     const updates = [];
 
@@ -117,7 +112,6 @@ router.patch('', async (req, res) => {
   }
 });
 
-// API lấy tất cả đơn hàng
 router.get('/all', async (req, res) => {
   try {
     const pool = await getConnectionPool();
@@ -143,7 +137,6 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// API xóa đơn hàng
 router.delete('/:ma_don_hang', async (req, res) => {
   const { ma_don_hang } = req.params;
 
@@ -180,7 +173,6 @@ router.delete('/:ma_don_hang', async (req, res) => {
   }
 });
 
-// Lấy danh sách đơn hàng của khách hàng theo trạng thái
 router.get('/:ma_khach_hang', async (req, res) => {
   const { ma_khach_hang } = req.params;
   const { trang_thai } = req.query;
@@ -199,7 +191,6 @@ router.get('/:ma_khach_hang', async (req, res) => {
   }
 });
 
-// API lấy chi tiết đơn hàng
 router.get('/:ma_don_hang', async (req, res) => {
   const { ma_don_hang } = req.params;
 

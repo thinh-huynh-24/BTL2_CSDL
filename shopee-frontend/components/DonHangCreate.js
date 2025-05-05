@@ -15,12 +15,7 @@ export default function DonHangCreate() {
     tong_tien: 0
   });
 
-  const [options, setOptions] = useState({
-    nguoiBan: [],
-    diaChi: [],
-    khachHang: [],
-    kho: []
-  });
+  
 
   const [message, setMessage] = useState(null);
 
@@ -42,7 +37,6 @@ export default function DonHangCreate() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Chuyển đổi tên trường sang đúng định dạng backend cần
     const payload = {
       MaDonHang: formData.ma_don_hang,
       MaNguoiBan: formData.ma_nguoi_ban,
@@ -66,8 +60,7 @@ export default function DonHangCreate() {
 
       const result = await res.json();
       if (!res.ok) {
-        // Ưu tiên lấy error từ backend, nếu không có thì lấy message
-        throw new Error(result.error || result.message || 'Có lỗi xảy ra khi tạo đơn hàng');
+        throw new Error(result.error);
       }
 
       setMessage({ type: 'success', text: result.message || 'Tạo đơn hàng thành công' });
@@ -102,59 +95,52 @@ export default function DonHangCreate() {
       <form onSubmit={handleSubmit} className="space-y-3">
         <input name="ma_don_hang" value={formData.ma_don_hang} onChange={handleChange}
           placeholder="Mã đơn hàng (VD: DH001)" className="w-full border p-2 rounded" required pattern="DH\d{3}" title="Mã đơn hàng phải có định dạng DHxxx" />
-        
         <input
-  type="text"
-  name="ma_nguoi_ban"
-  value={formData.ma_nguoi_ban}
-  onChange={handleChange}
-  placeholder="Nhập mã người bán"
-  className="w-full border p-2 rounded"
-  required
-/>
-
-<input
-  type="text"
-  name="ma_dia_chi"
-  value={formData.ma_dia_chi}
-  onChange={handleChange}
-  placeholder="Nhập mã địa chỉ"
-  className="w-full border p-2 rounded"
-  required
-/>
-
-<input
-  type="number"
-  name="phi_van_chuyen"
-  value={formData.phi_van_chuyen}
-  onChange={handleChange}
-  placeholder="Phí vận chuyển"
-  className="w-full border p-2 rounded"
-  min="0"
-  required
-/>
-
-<input
-  type="text"
-  name="ma_khach_hang"
-  value={formData.ma_khach_hang}
-  onChange={handleChange}
-  placeholder="Nhập mã khách hàng"
-  className="w-full border p-2 rounded"
-  required
-/>
-
-<input
-  type="text"
-  name="ma_kho"
-  value={formData.ma_kho}
-  onChange={handleChange}
-  placeholder="Nhập mã kho"
-  className="w-full border p-2 rounded"
-  required
-/>
-
-
+          type="text"
+          name="ma_nguoi_ban"
+          value={formData.ma_nguoi_ban}
+          onChange={handleChange}
+          placeholder="Nhập mã người bán"
+          className="w-full border p-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          name="ma_dia_chi"
+          value={formData.ma_dia_chi}
+          onChange={handleChange}
+          placeholder="Nhập mã địa chỉ"
+          className="w-full border p-2 rounded"
+          required
+        />
+        <input
+          type="number"
+          name="phi_van_chuyen"
+          value={formData.phi_van_chuyen}
+          onChange={handleChange}
+          placeholder="Phí vận chuyển"
+          className="w-full border p-2 rounded"
+          min="0"
+          required
+        />
+        <input
+          type="text"
+          name="ma_khach_hang"
+          value={formData.ma_khach_hang}
+          onChange={handleChange}
+          placeholder="Nhập mã khách hàng"
+          className="w-full border p-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          name="ma_kho"
+          value={formData.ma_kho}
+          onChange={handleChange}
+          placeholder="Nhập mã kho"
+          className="w-full border p-2 rounded"
+          required
+        />
         <select name="phuong_thuc_thanh_toan" value={formData.phuong_thuc_thanh_toan} onChange={handleChange} className="w-full border p-2 rounded" required>
           <option value="">Chọn phương thức thanh toán</option>
           <option value="Tiền mặt">Tiền mặt</option>
