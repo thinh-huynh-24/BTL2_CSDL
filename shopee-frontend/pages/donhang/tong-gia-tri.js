@@ -7,29 +7,31 @@ export default function TongGiaTriDonHang() {
   const [error, setError] = useState('');
   const [donHangOptions, setDonHangOptions] = useState([]);
 
-  // Lấy danh sách mã đơn hàng cho dropdown
-  useEffect(() => {
-    fetch('http://localhost:3000/api/ma-lien-quan')
-      .then(res => res.json())
-      .then(data => setDonHangOptions(data.donHang || []))
-      .catch(() => setDonHangOptions([]));
-  }, []);
+  // Kiểm tra response trong console
+useEffect(() => {
+  fetch('http://localhost:3000/api/ma-lien-quan')
+    .then(res => res.json())
+    .then(data => {
+      console.log('API Response:', data);  // Thêm log này
+      setDonHangOptions(data.donHang || [])
+    })
+    .catch(error => {
+      console.error('API Error:', error);  // Thêm log lỗi
+      setDonHangOptions([])
+    });
+}, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setTongGiaTri(null);
-    if (!maDonHang) {
-      setError('Vui lòng chọn mã đơn hàng!');
-      return;
-    }
     try {
       const response = await fetch(`http://localhost:3000/api/donhang/tong-gia-tri/${maDonHang}`);
       const data = await response.json();
-      if (response.ok) {
-        setTongGiaTri(data.tong_gia_tri);
+      if (data.tong_gia_tri === null) {
+        setError('Không tìm thấy đơn hàng này');
+        setTongGiaTri(null);
       } else {
-        setError(data.message);
+        setTongGiaTri(data.tong_gia_tri);
+        setError('');
       }
     } catch (err) {
       setError('Có lỗi xảy ra. Vui lòng thử lại!');

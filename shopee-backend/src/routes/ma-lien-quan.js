@@ -14,12 +14,14 @@ router.get('/', async (req, res) => {
     const khachHang = await pool.request().query('SELECT ma_khach_hang FROM khach_hang');
     // Lấy mã kho
     const kho = await pool.request().query('SELECT ma_kho FROM kho');
-
+    // Thêm query lấy mã đơn hàng
+    const donHang = await pool.request().query('SELECT ma_don_hang FROM don_hang');
     res.json({
       nguoiBan: nguoiBan.recordset.map(row => row.ma_nguoi_ban),
       diaChi: diaChi.recordset.map(row => row.ma_dia_chi),
       khachHang: khachHang.recordset.map(row => row.ma_khach_hang),
       kho: kho.recordset.map(row => row.ma_kho),
+      donHang: donHang.recordset.map(row => row.ma_don_hang)
     });
   } catch (error) {
     console.error('Lỗi khi lấy mã liên quan:', error);

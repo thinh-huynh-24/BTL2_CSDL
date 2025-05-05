@@ -208,52 +208,32 @@ export default function DonHangForm() {
                 readOnly
               />
 
-              {/* Mã người bán - chỉ hiển thị, không cho sửa */}
               <input
-                type="text"
+                type="text" 
                 name="MaNguoiBan"
-                className="border p-2 w-full rounded bg-gray-100"
+                className="border p-2 w-full rounded"
                 placeholder="Mã người bán"
                 value={editingDonHang.MaNguoiBan || ''}
-                disabled
-                readOnly
+                onChange={(e) => setEditingDonHang({...editingDonHang, MaNguoiBan: e.target.value})}
               />
 
-              {/* Mã khách hàng - chỉ hiển thị, không cho sửa */}
               <input
                 type="text"
-                name="MaKhachHang"
-                className="border p-2 w-full rounded bg-gray-100"
+                name="MaKhachHang" 
+                className="border p-2 w-full rounded"
                 placeholder="Mã khách hàng"
                 value={editingDonHang.MaKhachHang || ''}
-                disabled
-                readOnly
+                onChange={(e) => setEditingDonHang({...editingDonHang, MaKhachHang: e.target.value})}
               />
 
-              {/* Mã kho - chỉ hiển thị, không cho sửa */}
               <input
                 type="text"
                 name="MaKho"
-                className="border p-2 w-full rounded bg-gray-100"
+                className="border p-2 w-full rounded"
                 placeholder="Mã kho"
                 value={editingDonHang.MaKho || ''}
-                disabled
-                readOnly
+                onChange={(e) => setEditingDonHang({...editingDonHang, MaKho: e.target.value})}
               />
-
-              {/* Các trường còn lại cho phép chỉnh sửa */}
-              <select
-                name="MaDiaChi"
-                className="border p-2 w-full rounded"
-                value={editingDonHang.MaDiaChi || ''}
-                onChange={e => setEditingDonHang({ ...editingDonHang, MaDiaChi: e.target.value })}
-                required
-              >
-                <option value="">Chọn mã địa chỉ</option>
-                {maLienQuan.diaChi.map(ma => (
-                  <option key={ma} value={ma}>{ma}</option>
-                ))}
-              </select>
 
               <input
                 type="number"

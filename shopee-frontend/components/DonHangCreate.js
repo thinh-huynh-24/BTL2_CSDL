@@ -103,28 +103,57 @@ export default function DonHangCreate() {
         <input name="ma_don_hang" value={formData.ma_don_hang} onChange={handleChange}
           placeholder="Mã đơn hàng (VD: DH001)" className="w-full border p-2 rounded" required pattern="DH\d{3}" title="Mã đơn hàng phải có định dạng DHxxx" />
         
-        <select name="ma_nguoi_ban" value={formData.ma_nguoi_ban} onChange={handleChange} className="w-full border p-2 rounded" required>
-          <option value="">Chọn mã người bán</option>
-          {options.nguoiBan.map(ma => <option key={ma} value={ma}>{ma}</option>)}
-        </select>
+        <input
+  type="text"
+  name="ma_nguoi_ban"
+  value={formData.ma_nguoi_ban}
+  onChange={handleChange}
+  placeholder="Nhập mã người bán"
+  className="w-full border p-2 rounded"
+  required
+/>
 
-        <select name="ma_dia_chi" value={formData.ma_dia_chi} onChange={handleChange} className="w-full border p-2 rounded" required>
-          <option value="">Chọn mã địa chỉ</option>
-          {options.diaChi.map(ma => <option key={ma} value={ma}>{ma}</option>)}
-        </select>
+<input
+  type="text"
+  name="ma_dia_chi"
+  value={formData.ma_dia_chi}
+  onChange={handleChange}
+  placeholder="Nhập mã địa chỉ"
+  className="w-full border p-2 rounded"
+  required
+/>
 
-        <input type="number" name="phi_van_chuyen" value={formData.phi_van_chuyen} onChange={handleChange}
-          placeholder="Phí vận chuyển" className="w-full border p-2 rounded" min="0" required />
+<input
+  type="number"
+  name="phi_van_chuyen"
+  value={formData.phi_van_chuyen}
+  onChange={handleChange}
+  placeholder="Phí vận chuyển"
+  className="w-full border p-2 rounded"
+  min="0"
+  required
+/>
 
-        <select name="ma_khach_hang" value={formData.ma_khach_hang} onChange={handleChange} className="w-full border p-2 rounded" required>
-          <option value="">Chọn mã khách hàng</option>
-          {options.khachHang.map(ma => <option key={ma} value={ma}>{ma}</option>)}
-        </select>
+<input
+  type="text"
+  name="ma_khach_hang"
+  value={formData.ma_khach_hang}
+  onChange={handleChange}
+  placeholder="Nhập mã khách hàng"
+  className="w-full border p-2 rounded"
+  required
+/>
 
-        <select name="ma_kho" value={formData.ma_kho} onChange={handleChange} className="w-full border p-2 rounded" required>
-          <option value="">Chọn mã kho</option>
-          {options.kho.map(ma => <option key={ma} value={ma}>{ma}</option>)}
-        </select>
+<input
+  type="text"
+  name="ma_kho"
+  value={formData.ma_kho}
+  onChange={handleChange}
+  placeholder="Nhập mã kho"
+  className="w-full border p-2 rounded"
+  required
+/>
+
 
         <select name="phuong_thuc_thanh_toan" value={formData.phuong_thuc_thanh_toan} onChange={handleChange} className="w-full border p-2 rounded" required>
           <option value="">Chọn phương thức thanh toán</option>
